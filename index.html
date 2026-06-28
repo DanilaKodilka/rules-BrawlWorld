@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrawlWorld - Правила сервера</title>
+    <link rel="styleheet" type="text/css" href="style.css">
+</head>
+<style>
+           :root {
+            --bg-primary: #0b0c14;
+            --bg-secondary: #12141f;
+            --bg-card: #181a28;
+            --bg-sidebar: #10121c;
+            --accent-gold: #e2b04a;
+            --accent-gold-light: #f0d078;
+            --accent-red: #e0483a;
+            --accent-red-dark: #b8352a;
+            --text-primary: #e8e6e1;
+            --text-secondary: #b0ada6;
+            --text-muted: #78767a;
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --border-card: rgba(255, 255, 255, 0.08);
+            --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+            --shadow-glow-gold: 0 0 30px rgba(226, 176, 74, 0.15);
+            --shadow-glow-red: 0 0 20px rgba(224, 72, 58, 0.2);
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --transition-fast: 0.2s ease;
+            --transition-smooth: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-heading: 'Segoe UI', 'Helvetica Neue', system-ui, sans-serif;
+            --font-body: 'Inter', 'Segoe UI', 'Helvetica Neue', system-ui, sans-serif;
+            --sidebar-width: 260px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 30px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            display: flex;
+            min-height: 100vh;
+            line-height: 1.7;
+            letter-spacing: 0.01em;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-image:
+                radial-gradient(ellipse at 20% 20%, rgba(226, 176, 74, 0.04) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 60%, rgba(224, 72, 58, 0.03) 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 100%, rgba(226, 176, 74, 0.03) 0%, transparent 50%);
+        }
+        .sidebar {
+            position: sticky;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            min-width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border-subtle);
+            padding: 28px 20px;
+            overflow-y: auto;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            box-shadow: 4px 0 30px rgba(0, 0, 0, 0.3);
+            transition: var(--transition-smooth);
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px 24px 12px;
+            border-bottom: 1px solid var(--border-subtle);
+            margin-bottom: 10px;
+        }
+
+        .sidebar-logo .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--accent-gold), #c98d2f);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: var(--shadow-glow-gold);
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo .logo-text {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+        .sidebar-logo .logo-text span {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: var(--accent-gold-light);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            flex: 1;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition-fast);
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .sidebar-nav a:hover {
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-primary);
+        }
+
+        .sidebar-nav a.active {
+            background: rgba(226, 176, 74, 0.1);
+            color: var(--accent-gold-light);
+            font-weight: 600;
+            box-shadow: inset 3px 0 0 var(--accent-gold);
+        }
+
+        .sidebar-nav a .nav-icon {
+            font-size: 1.15rem;
+            width: 24px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .sidebar-nav a .nav-badge {
+            margin-left: auto;
+            font-size: 0.65rem;
+            background: var(--accent-red);
+            color: #fff;
+            padding: 2px 7px;
+            border-radius: 20px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+        }
+
+        .sidebar-footer {
+            padding-top: 16px;
+            border-top: 1px solid var(--border-subtle);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-align: center;
+            letter-spacing: 0.04em;
+        }
+        .main-content {
+            flex: 1;
+            padding: 36px 40px 60px 40px;
+            max-width: 900px;
+            overflow-y: auto;
+        }
+
+        .main-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        .main-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .main-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+        }
+
+        .page-header {
+            margin-bottom: 36px;
+            text-align: center;
+        }
+
+        .page-header .header-icon {
+            font-size: 3.5rem;
+            display: block;
+            margin-bottom: 8px;
+            animation: floatIcon 3s ease-in-out infinite;
+        }
+
+        @keyframes floatIcon {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .page-header h1 {
+            font-family: var(--font-heading);
+            font-size: 2.6rem;
+            font-weight: 800;
+            background: linear-gradient(180deg, #f0d078 0%, #d4a43a 50%, #b8861e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.03em;
+            margin-bottom: 4px;
+        }
+
+        .page-header .subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .section-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: var(--radius-lg);
+            padding: 28px 30px;
+            margin-bottom: 22px;
+            box-shadow: var(--shadow-card);
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-gold), transparent 70%);
+            opacity: 0.7;
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        }
+
+        .section-card:hover {
+            border-color: rgba(255, 255, 255, 0.14);
+            box-shadow: var(--shadow-card), 0 0 40px rgba(226, 176, 74, 0.06);
+            transform: translateY(-2px);
+        }
+
+        .section-card.danger-zone::before {
+            background: linear-gradient(90deg, var(--accent-red), transparent 70%);
+        }
+
+        .section-card.danger-zone:hover {
+            box-shadow: var(--shadow-card), 0 0 30px rgba(224, 72, 58, 0.1);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .section-header .section-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            flex-shrink: 0;
+            background: rgba(226, 176, 74, 0.1);
+            border: 1px solid rgba(226, 176, 74, 0.25);
+        }
+
+        .section-card.danger-zone .section-icon {
+            background: rgba(224, 72, 58, 0.1);
+            border-color: rgba(224, 72, 58, 0.3);
+        }
+
+        .section-header h2 {
+            font-family: var(--font-heading);
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: 0.02em;
+            line-height: 1.3;
+        }
+
+        .section-header h2 .section-number {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--accent-gold-light);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .rule-item {
+            padding: 13px 16px;
+            margin-bottom: 10px;
+            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.015);
+            border-left: 3px solid transparent;
+            transition: var(--transition-fast);
+            position: relative;
+        }
+
+        .rule-item:hover {
+            background: rgba(255, 255, 255, 0.03);
+            border-left-color: rgba(226, 176, 74, 0.5);
+        }
+
+        .rule-item .rule-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            margin-bottom: 2px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .rule-item .rule-number {
+            color: var(--accent-gold-light);
+            font-weight: 700;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0.85;
+        }
+
+        .rule-item .rule-desc {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-top: 2px;
+        }
+
+        .rule-item .rule-sub {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            margin-top: 4px;
+            padding-left: 16px;
+            border-left: 2px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* ─────────────── Бейдж наказания ─────────────── */
+        .punishment-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(224, 72, 58, 0.12);
+            border: 1px solid rgba(224, 72, 58, 0.35);
+            color: #f8716b;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin-top: 6px;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+            transition: var(--transition-fast);
+        }
+
+        .punishment-badge:hover {
+            background: rgba(224, 72, 58, 0.2);
+            border-color: rgba(224, 72, 58, 0.55);
+            box-shadow: var(--shadow-glow-red);
+        }
+
+        .punishment-badge .badge-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-red);
+            animation: pulseDot 1.8s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes pulseDot {
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(224, 72, 58, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(224, 72, 58, 0);
+            }
+        }
+
+        .punishment-badge.permanent {
+            background: rgba(180, 0, 0, 0.2);
+            border-color: rgba(220, 40, 40, 0.5);
+            color: #ff6b6b;
+            font-weight: 700;
+        }
+
+        .rule-sublist {
+            list-style: none;
+            padding-left: 20px;
+            margin-top: 4px;
+        }
+        .rule-sublist li {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            padding: 2px 0;
+            position: relative;
+            padding-left: 16px;
+        }
+        .rule-sublist li::before {
+            content: '⛔';
+            position: absolute;
+            left: 0;
+            top: 2px;
+            font-size: 0.6rem;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            color: var(--accent-gold-light);
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-card);
+            transition: var(--transition-smooth);
+            z-index: 200;
+            opacity: 0.85;
+        }
+
+        .back-to-top:hover {
+            opacity: 1;
+            border-color: var(--accent-gold);
+            box-shadow: var(--shadow-glow-gold);
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                min-width: 100%;
+                height: auto;
+                max-height: 45vh;
+                border-right: none;
+                border-bottom: 1px solid var(--border-subtle);
+                padding: 16px 14px;
+                flex-shrink: 0;
+            }
+
+            .sidebar-logo {
+                padding-bottom: 14px;
+                margin-bottom: 6px;
+            }
+            .sidebar-logo .logo-text {
+                font-size: 1rem;
+            }
+
+            .sidebar-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 4px;
+            }
+            .sidebar-nav a {
+                padding: 7px 10px;
+                font-size: 0.75rem;
+                gap: 5px;
+                border-radius: 6px;
+            }
+            .sidebar-nav a .nav-icon {
+                font-size: 0.9rem;
+                width: 18px;
+            }
+            .sidebar-nav a .nav-badge {
+                display: none;
+            }
+            .sidebar-footer {
+                display: none;
+            }
+
+            .main-content {
+                padding: 20px 16px 40px 16px;
+                max-width: 100%;
+            }
+
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+            .page-header .header-icon {
+                font-size: 2.4rem;
+            }
+
+            .section-card {
+                padding: 18px 16px;
+                border-radius: var(--radius-md);
+            }
+            .section-header h2 {
+                font-size: 1.1rem;
+            }
+            .section-header .section-icon {
+                width: 38px;
+                height: 38px;
+                font-size: 1.2rem;
+            }
+
+            .back-to-top {
+                bottom: 16px;
+                right: 16px;
+                width: 38px;
+                height: 38px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar-nav a {
+                font-size: 0.7rem;
+                padding: 6px 8px;
+            }
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+            .rule-item {
+                padding: 10px 12px;
+            }
+            .rule-item .rule-title {
+                font-size: 0.85rem;
+            }
+            .punishment-badge {
+                font-size: 0.7rem;
+                padding: 4px 10px;
+            }
+        }
+</style>
+<body>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon">📜</div>
+            <div class="logo-text">
+                Правила
+                <span>Сервера BrawlWorld</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#section1">
+                <span class="nav-icon">🏛️</span> Общие положения
+            </a>
+            <a href="#section2">
+                <span class="nav-icon">🕹️</span> Игровой процесс
+            </a>
+            <a href="#section3">
+                <span class="nav-icon">🗨️</span> Чат
+            </a>
+            <a href="#section4">
+                <span class="nav-icon">🔑</span> Аккаунты
+            </a>
+            <a href="#section5">
+                <span class="nav-icon">🏰</span> Дома и регионы
+            </a>
+            <a href="#section6">
+                <span class="nav-icon">💎</span> Донат
+            </a>
+            <a href="#section7">
+                <span class="nav-icon">🔍</span> Проверки
+            </a>
+            <a href="#section8">
+                <span class="nav-icon">📦</span> Пропажа ресурсов
+            </a>
+            <a href="#section9">
+                <span class="nav-icon">📣</span> Дополнение
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            © 2026 Сервер · Все права защищены
+        </div>
+    </aside>
+    <main class="main-content" id="mainContent">
+
+        <div class="page-header">
+            <span class="header-icon">📜</span>
+            <h1>Правила сервера</h1>
+            <p class="subtitle">Ознакомьтесь перед игрой · Незнание правил не освобождает от ответственности</p>
+        </div>
+
+        <section class="section-card" id="section1">
+            <div class="section-header">
+                <div class="section-icon">🏛️</div>
+                <h2>
+                    <span class="section-number">Раздел 1</span>
+                    Общие положения
+                </h2>
+            </div>
+
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">1.1.</span> Согласие с правилами</div>
+                <div class="rule-desc">Играя на сервере, игрок автоматически соглашается со всеми правилами.</div>
+            </div>
+
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">1.2.</span> Незнание правил</div>
+                <div class="rule-desc">Незнание правил не освобождает от ответственности.</div>
+            </div>
+
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">1.3.</span> Обязанность соблюдения</div>
+                <div class="rule-desc">Игрок обязан соблюдать правила и требования администрации.</div>
+            </div>
+
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">1.4.</span> Усмотрение администрации</div>
+                <div class="rule-desc">Администрация вправе применять наказания по своему усмотрению в спорных ситуациях.</div>
+            </div>
+
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">1.5.</span> Урон вне PvP-зоны</div>
+                <div class="rule-desc">Запрещено наносить урон вне PvP-зоны (гравипушка, луки, гаджеты, пушка Диномайка и аналоги).</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Бан на 2 часа</span>
+            </div>
+
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">1.6.</span> Телепортация без разрешения</div>
+                <div class="rule-desc">Запрещена телепортация к игрокам или администрации без их разрешения.</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Бан на 1 час</span>
+            </div>
+        </section>
+        <section class="section-card" id="section2">
+            <div class="section-header">
+                <div class="section-icon">🕹️</div>
+                <h2>
+                    <span class="section-number">Раздел 2</span>
+                    Игровой процесс
+                </h2>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">2.1.</span> Покидание «Бравл-мира»</div>
+                <div class="rule-desc">Запрещено покидать «Бравл-мир» и добывать ресурсы в обычном мире.</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Бан 3 часа</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">2.2.</span> Тимминг в режиме «ШД»</div>
+                <div class="rule-desc">Тимминг в режиме «ШД» запрещён.</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Бан 5 часов</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">2.3.</span> Обман игроков / мошенничество</div>
+                <div class="rule-desc">Обман игроков и мошенничество строго запрещены.</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Бан 3 дня + изъятие ресурсов</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">2.4.</span> Использование читов и модификаций</div>
+                <div class="rule-desc">Запрещены любые читы и неразрешённые модификации:</div>
+                <div class="rule-sub">
+                    • Полноценные читы — <span class="punishment-badge" style="display:inline-flex;margin:0 2px;"><span class="badge-dot"></span> Бан 10 дней</span><br>
+                    • X-Ray, AutoClicker и аналоги — <span class="punishment-badge" style="display:inline-flex;margin:0 2px;"><span class="badge-dot"></span> Бан 5 дней</span>
+                </div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">2.5.</span> Хранение запрещённых программ</div>
+                <div class="rule-desc">Сроки хранения и наказания:</div>
+                <div class="rule-sub">
+                    • Более 2 недель — без наказания<br>
+                    • 1–2 недели — <strong>Бан 5 дней</strong><br>
+                    • Менее 1 недели — <strong>Бан 7 дней</strong>
+                </div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">2.6.</span> Баги и дюпы</div>
+                <div class="rule-desc">Использование, сокрытие или распространение багов и дюпов.</div>
+                <span class="punishment-badge permanent"><span class="badge-dot"></span> Бан навсегда</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">2.7.</span> Подстрекательство к нарушениям</div>
+                <div class="rule-desc">Подстрекательство к нарушению правил.</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Тюрьма 3 часа</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">2.8.</span> Выдавание себя за администрацию</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Бан на 3 часа</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">2.9.</span> Полёты на боссах / аирах</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Бан на 2 часа</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">2.10.</span> Лаг-машины</div>
+                <div class="rule-desc">Лаг-машины и конструкции, мешающие серверу.</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Бан 30 дней</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">2.11.</span> Мешательство игрокам</div>
+                <div class="rule-desc">Намеренное мешательство (блокирование, троллинг).</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Бан на 2 часа</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">2.12.</span> Лимит тимма</div>
+                <div class="rule-desc">Максимум <strong>3 игрока</strong> в одном тимме.</div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">2.13.</span> Альянсы и обход лимита тимма</div>
+                <div class="rule-desc">Запрещены альянсы и любые способы обхода лимита:</div>
+                <ul class="rule-sublist">
+                    <li>Совместная игра и добыча ресурсов</li>
+                    <li>Нахождение в одном тимме</li>
+                    <li>Добавление в регион дома</li>
+                </ul>
+                <div class="rule-desc" style="margin-top:4px;">Любое фактическое превышение лимита — нарушение.</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Бан 14 дней</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">2.14.</span> Набив киллов / фарм</div>
+                <div class="rule-desc">Запрещено набивать киллы на других игроках или фармить на них киллы для батл-пасса / кубков.</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Бан на 3 часа</span>
+            </div>
+        </section>
+        <section class="section-card" id="section3">
+            <div class="section-header">
+                <div class="section-icon">🗨️</div>
+                <h2>
+                    <span class="section-number">Раздел 3</span>
+                    Чат
+                </h2>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">3.1.</span> Флуд / спам (3+ сообщений подряд)</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Мут 20 минут</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">3.2.</span> Оскорбления и токсичность</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Мут 30 минут</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">3.3.</span> Оскорбление семьи и родственников</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Мут 2 часа</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">3.4.</span> Упоминание сторонних проектов</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Мут 1 час</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">3.5.</span> Личные данные / ссылки на соцсети</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Мут 20 минут</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">3.6.</span> Самовольный вызов на проверку читов</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Бан 1 день</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">3.7.</span> Обход мута</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Мут 1 день · повтор — Бан 1 день</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">3.8.</span> Попрошайничество</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Мут 15 минут</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">3.9.</span> Спам символами</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Мут 20 минут</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">3.10.</span> Реклама других проектов</div>
+                <span class="punishment-badge permanent"><span class="badge-dot"></span> Бан навсегда</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">3.11.</span> Политика, расизм, разжигание ненависти</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Мут 2 часа</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">3.12.</span> Оскорбление сервера / проекта</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Мут 2 часа</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">3.13.</span> CAPS LOCK (4+ символа)</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Мут 15 минут</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">3.14.</span> Оскорбления и угрозы администрации</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Мут 2 часа</span>
+            </div>
+        </section>
+        <section class="section-card danger-zone" id="section4">
+            <div class="section-header">
+                <div class="section-icon">🔑</div>
+                <h2>
+                    <span class="section-number">Раздел 4</span>
+                    Аккаунты
+                </h2>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">4.1.</span> Мультиаккаунтинг</div>
+                <div class="rule-desc">Использование нескольких аккаунтов одновременно.</div>
+                <span class="punishment-badge permanent"><span class="badge-dot"></span> Бан навсегда всех аккаунтов</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">4.2.</span> Передача аккаунта третьим лицам</div>
+                <span class="punishment-badge permanent"><span class="badge-dot"></span> Бан навсегда</span>
+            </div>
+        </section>
+        <section class="section-card" id="section5">
+            <div class="section-header">
+                <div class="section-icon">🏰</div>
+                <h2>
+                    <span class="section-number">Раздел 5</span>
+                    Дома и регионы
+                </h2>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">5.1.</span> Добыча ресурсов с территории дома</div>
+                <div class="rule-desc">Запрещено добывать и продавать ресурсы с территории дома.</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Изъятие ресурсов и дома</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">5.2.</span> Обман администрации при покупке дома</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Отказ / изъятие дома</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">5.3.</span> Продажа домов</div>
+                <div class="rule-desc">Продажа домов — <strong>только через администрацию</strong>.</div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">5.4.</span> Возврат средств</div>
+                <div class="rule-desc">Возврат средств не производится.</div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">5.5.</span> Ответственность владельца</div>
+                <div class="rule-desc">Добавление игроков — на ответственности владельца.</div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">5.6.</span> Срок действия дома</div>
+                <div class="rule-desc">Дом действует <strong>1 вайп</strong>.</div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">5.7.</span> Перепродажа домов</div>
+                <div class="rule-desc">Перепродажа домов запрещена.</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Изъятие дома</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">5.8.</span> Торг и скидки</div>
+                <div class="rule-desc">Запрещено торговаться и просить скидку.</div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">5.9.</span> Один игрок — один дом</div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">5.10.</span> Ресурсы</div>
+                <div class="rule-desc">Ресурсы покупаются за Gold Coins или входят в стоимость дома.</div>
+            </div>
+        </section>
+        <section class="section-card danger-zone" id="section6">
+            <div class="section-header">
+                <div class="section-icon">💎</div>
+                <h2>
+                    <span class="section-number">Раздел 6</span>
+                    Донат
+                </h2>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">6.1.</span> Неначисление доната</div>
+                <div class="rule-desc">При неначислении доната нужен чек.</div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">6.2.</span> Изъятие доната</div>
+                <div class="rule-desc">Донат может быть изъят без компенсации.</div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">6.3.</span> Мошенничество с оплатой</div>
+                <span class="punishment-badge permanent"><span class="badge-dot"></span> Бан навсегда</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">6.4.</span> Добровольность доната</div>
+                <div class="rule-desc">Донат добровольный, возврат средств не производится.</div>
+            </div>
+        </section>
+        <section class="section-card" id="section7">
+            <div class="section-header">
+                <div class="section-icon">🔍</div>
+                <h2>
+                    <span class="section-number">Раздел 7</span>
+                    Проверки
+                </h2>
+            </div>
+
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">7.1.</span> Обязанность выполнения требований</div>
+                <div class="rule-desc">Игрок обязан выполнять требования проверяющего.</div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">7.2.</span> Форс-мажор</div>
+                <div class="rule-desc">При форс-мажоре — уведомить администрацию.</div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">7.3.</span> Выход во время проверки</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> Бан 3 дня</span>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">7.4.</span> Мешательство проверке</div>
+                <span class="punishment-badge"><span class="badge-dot"></span> По усмотрению администрации</span>
+            </div>
+        </section>
+        <section class="section-card" id="section8">
+            <div class="section-header">
+                <div class="section-icon">📦</div>
+                <h2>
+                    <span class="section-number">Раздел 8</span>
+                    Пропажа ресурсов
+                </h2>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">8.1.</span> Ответственность администрации</div>
+                <div class="rule-desc">Администрация не отвечает за утерю ресурсов.</div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">8.2.</span> Компенсация</div>
+                <div class="rule-desc">Компенсация — <strong>только с видеодоказательствами</strong> бага.</div>
+            </div>
+        </section>
+        <section class="section-card" id="section9">
+            <div class="section-header">
+                <div class="section-icon">📣</div>
+                <h2>
+                    <span class="section-number">Раздел 9</span>
+                    Дополнение
+                </h2>
+            </div>
+            <div class="rule-item">
+                <div class="rule-title"><span class="rule-number">9.1.</span> Увеличение наказания</div>
+                <div class="rule-desc">Администрация вправе увеличивать наказание в зависимости от тяжести нарушения и повторности. ⚖️</div>
+            </div>
+        </section>
+    </main>
+    <button class="back-to-top" id="backToTop" title="Наверх">▲</button>
+    <script>
+        const backToTopBtn = document.getElementById('backToTop');
+        const mainContent = document.getElementById('mainContent');
+        const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+        const sections = document.querySelectorAll('.section-card');
+        function toggleBackToTop() {
+            if (mainContent.scrollTop > 500) {
+                backToTopBtn.style.opacity = '1';
+                backToTopBtn.style.pointerEvents = 'auto';
+            } else {
+                backToTopBtn.style.opacity = '0';
+                backToTopBtn.style.pointerEvents = 'none';
+            }
+        }
+
+        backToTopBtn.addEventListener('click', () => {
+            mainContent.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        mainContent.addEventListener('scroll', toggleBackToTop);
+        function updateActiveSidebarLink() {
+            let currentSection = '';
+            const scrollTop = mainContent.scrollTop + 80;
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollTop >= sectionTop) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+
+            sidebarLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + currentSection) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        mainContent.addEventListener('scroll', updateActiveSidebarLink);
+
+        backToTopBtn.style.opacity = '0';
+        backToTopBtn.style.pointerEvents = 'none';
+        toggleBackToTop();
+    </script>
+
+</body>
+</html>
